@@ -1,6 +1,8 @@
 # Simple message reader
 > Convert `ArrayBuffer` or `Blob` to string (Browser only)
 
+[![Travis](https://img.shields.io/travis/poppinss/simple-message-reader.svg?style=for-the-badge)](https://github.com/poppinss/simple-message-reader)
+
 The websocket or XHR requests now can return data as a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) or [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). Using this package, you can conver them back to string.
 
 ```bash
