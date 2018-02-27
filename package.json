@@ -1,6 +1,6 @@
 {
   "name": "simple-message-reader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert ArrayBuffer and Blobs to strings. Browser only",
   "main": "bundle.js",
   "files": ["bundle.js"],
