@@ -40,7 +40,7 @@ function blobToString (input, cb) {
   reader.onerror = (event) => cb(event)
   reader.onabort = (event) => cb(event)
 
-  reader.readAsText(input)
+  reader.readAsArrayBuffer(input)
 }
 
 /**

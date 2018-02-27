@@ -25,7 +25,10 @@ group('Array buffer', () => {
     const buff = new window.Blob([new Uint8Array([72, 101, 108, 108, 111, 32, 33])])
     simpleMessageReader(buff, (error, result) => {
       if (error) { return done(error) }
-      assert.equal(result, 'Hello !')
+      simpleMessageReader(result, (err, raw) => {
+        if (err) { return done(err) }
+        assert.equal(raw, 'Hello !')
+      })
       done()
     })
   })
