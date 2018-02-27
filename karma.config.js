@@ -2,7 +2,18 @@ const path = require('path')
 const isTravis = require('is-travis')
 
 process.env.CHROME_BIN = require('puppeteer').executablePath()
-const browsers = isTravis ? ['ChromeHeadless'] : ['Chrome']
+const settings = isTravis ? {
+  browsers: ['Chrome_without_security'],
+  customLaunchers: {
+    Chrome_without_security: {
+      base: 'ChromeHeadless',
+      flags: ['--no-sandbox']
+    }
+  }
+} : {
+  browsers: ['Chrome'],
+  customLaunchers: {}
+}
 
 // Karma configuration
 // Generated on Sun Feb 25 2018 21:14:55 GMT+0530 (IST)
@@ -76,7 +87,9 @@ module.exports = function (config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: browsers,
+    browsers: settings.browsers,
+
+    customLaunchers: settings.customLaunchers,
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
