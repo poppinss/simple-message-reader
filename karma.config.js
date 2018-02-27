@@ -2,7 +2,7 @@ const path = require('path')
 const isTravis = require('is-travis')
 
 process.env.CHROME_BIN = require('puppeteer').executablePath()
-const browsers = isTravis ? ['ChromeHeadless'] : ['ChromeHeadless']
+const browsers = isTravis ? ['ChromeHeadless'] : ['Chrome']
 
 // Karma configuration
 // Generated on Sun Feb 25 2018 21:14:55 GMT+0530 (IST)
@@ -80,7 +80,7 @@ module.exports = function (config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
+    singleRun: true,
 
     // Concurrency level
     // how many browser should be started simultaneous
