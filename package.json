@@ -1,13 +1,13 @@
 {
   "name": "simple-message-reader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Convert ArrayBuffer and Blobs to strings. Browser only",
   "main": "bundle.js",
   "files": ["bundle.js"],
   "scripts": {
     "lint": "standard",
     "pretest": "npm run lint",
-    "build": "webpack --mode=development",
+    "build": "webpack --mode=production",
     "prePublishOnly": "npm run build",
     "test": "karma start karma.config.js"
   },
