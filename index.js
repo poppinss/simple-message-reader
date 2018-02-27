@@ -10,56 +10,119 @@
 */
 
 /**
- * Converts array buffer to string
+ * List of output formats accepted when parsing
+ * blobs
  *
- * @method bufferToString
+ * @type {Object}
  *
- * @param  {ArrayBuffer}       buff
- * @param  {Function}          cb
+ * @attribute acceptedTypesMap
  *
- * @return {void}
+ * @example
+ * ```js
+ * ['arrayBuffer', 'binaryString', 'dataURL', 'text']
+ * ```
  */
-function bufferToString (buff, cb) {
-  cb(null, String.fromCharCode.apply(null, new Uint8Array(buff)))
+const acceptedTypesMap = {
+  'arrayBuffer': 'readAsArrayBuffer',
+  'binaryString': 'readAsBinaryString',
+  'dataURL': 'readAsDataURL',
+  'text': 'readAsText'
 }
 
 /**
- * Reads blob to a string
+ * Returns a boolean telling if value is blob or
+ * not
  *
- * @method blobToString
+ * @method isBlob
  *
- * @param  {Blob}       input
- * @param  {Function}   cb
+ * @param  {Blob}  input
+ *
+ * @return {Boolean}
+ *
+ * @example
+ * ```js
+ * isBlob(new Blob())
+ * ```
+ */
+export function isBlob (input) {
+  return input instanceof window.Blob === true
+}
+
+/**
+ * Returns a boolean telling if value is any of
+ * the ArrayBuffer view or not
+ *
+ * @method isArrayBuffer
+ *
+ * @param  {ArrayBufferView}      input
+ *
+ * @return {Boolean}
+ *
+ * @example
+ * ```js
+ * isArrayBuffer(new Uint8Array())
+ * ```
+ */
+export function isArrayBuffer (input) {
+  return ArrayBuffer.isView(input)
+}
+
+/**
+ * Parses the blob to any of the accepted outputFormat types.
+ *
+ * Callback will be called with error, if `outputFormat` is invalid
+ * or `input` is not a blob.
+ *
+ * @method parseBlob
+ *
+ * @param  {Blob}     input
+ * @param  {Function} cb
+ * @param  {String}   [outputFormat = 'arrayBuffer']
  *
  * @return {void}
+ *
+ * @example
+ * ```js
+ * parseBlob(new Blob(), function (error, output) {
+ *
+ * }, 'arrayBuffer')
+ * ```
  */
-function blobToString (input, cb) {
-  const reader = new window.FileReader()
+export function parseBlob (input, cb, outputFormat) {
+  const acceptedTypes = Object.keys(acceptedTypesMap)
+  outputFormat = outputFormat || 'arrayBuffer'
 
+  if (acceptedTypes.indexOf(outputFormat) === -1) {
+    cb(new Error(`${outputFormat} is not supported. Only ${acceptedTypes.join(',')} are allowed`))
+    return
+  }
+
+  if (!isBlob(input)) {
+    cb(new Error('Input must be blob'))
+    return
+  }
+
+  const reader = new window.FileReader()
   reader.onload = (event) => cb(null, event.target.result)
   reader.onerror = (event) => cb(event)
   reader.onabort = (event) => cb(event)
-
-  reader.readAsText(input)
+  reader[acceptedTypesMap[outputFormat]](input)
 }
 
 /**
- * Convert ArrayBuffer or Blob to a string, if
- * value is unknow, will be returned as it is
+ * Parses the arrayBuffer to a string
  *
- * @param  {Mixed}    input
- * @param  {Function} cb
+ * @method parseArrayBuffer
  *
- * @return {Mixed}
+ * @param  {ArrayBufferView}         input
+ *
+ * @return {String}
+ *
+ * @example
+ * ```js
+ * parseArrayBuffer(new Uint8Array([72, 101, 108, 108, 111, 32, 33])
+ * ```
  */
-module.exports = function (input, cb) {
-  if (input instanceof window.Blob === true) {
-    return blobToString(input, cb)
-  }
-
-  if (ArrayBuffer.isView(input)) {
-    return bufferToString(input, cb)
-  }
-
-  cb(null, input)
+export function parseArrayBuffer (input) {
+  return String.fromCharCode.apply(null, new Uint8Array(input))
 }
