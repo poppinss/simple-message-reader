@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
 */
 
-import { isBlob, isArrayBuffer, parseBlob, parseArrayBuffer } from '../index'
+import { isBlob, isArrayBuffer, parseBlob, parseArrayBuffer } from '../dist/smr.es.js'
 
 group('Array buffer', () => {
   test('return true when input is blob', (assert) => {
