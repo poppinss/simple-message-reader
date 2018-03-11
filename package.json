@@ -44,5 +44,17 @@
       "group",
       "test"
     ]
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/poppinss/simple-message-reader.git"
+  },
+  "bugs": {
+    "url": "https://github.com/poppinss/simple-message-reader/issues"
+  },
+  "homepage": "https://github.com/poppinss/simple-message-reader#readme"
 }
