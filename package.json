@@ -1,6 +1,6 @@
 {
   "name": "simple-message-reader",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Convert ArrayBuffer and Blobs to strings. Browser only",
   "main": "dist/smr.es.js",
   "browser": "dist/smr.browser.js",
