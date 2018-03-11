@@ -1,19 +1,4 @@
-const path = require('path')
-const isTravis = require('is-travis')
-
 process.env.CHROME_BIN = require('puppeteer').executablePath()
-const settings = isTravis ? {
-  browsers: ['Chrome_without_security'],
-  customLaunchers: {
-    Chrome_without_security: {
-      base: 'ChromeHeadless',
-      flags: ['--no-sandbox']
-    }
-  }
-} : {
-  browsers: ['Chrome'],
-  customLaunchers: {}
-}
 
 // Karma configuration
 // Generated on Sun Feb 25 2018 21:14:55 GMT+0530 (IST)
@@ -30,8 +15,9 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'index.js',
-      'test/*.spec.js'
+      {
+        pattern: 'test/*.spec.js', watched: false
+      }
     ],
 
     // list of files / patterns to exclude
@@ -41,31 +27,15 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'index.js': ['webpack'],
-      'test/*.spec.js': ['webpack']
+      'test/*.spec.js': ['rollup']
     },
 
-    webpack: {
+    rollupPreprocessor: {
+      plugins: require('./rollup.plugins.js'),
       output: {
-        path: path.resolve(__dirname),
-        filename: 'bundle.js',
-        library: ['simpleMessageReader'],
-        libraryTarget: 'umd'
-      },
-      mode: 'development',
-      module: {
-        rules: [
-          {
-            test: /\.js$/,
-            exclude: ['node_modules'],
-            use: {
-              loader: 'babel-loader',
-              options: {
-                presets: ['env']
-              }
-            }
-          }
-        ]
+        format: 'iife',
+        name: 'wspTest',
+        sourcemap: 'inline'
       }
     },
 
@@ -85,13 +55,16 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    autoWatch: false,
 
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: settings.browsers,
+    browsers: ['Chrome_without_security'],
 
-    customLaunchers: settings.customLaunchers,
+    customLaunchers: {
+      Chrome_without_security: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    },
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
